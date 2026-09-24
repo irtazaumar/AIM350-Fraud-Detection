@@ -1,5 +1,7 @@
-# Large/raw data
+# Dataset files
 data/*.csv
+data/**/*.csv
+archive/**/*.csv
 
 # Python cache
 __pycache__/
@@ -14,4 +16,10 @@ venv/
 
 # Generated model files
 models/*.pkl
-models/*.joblib 
+models/*.joblib
+
+# OS files
+.DS_Store
+Thumbs.db
+
+archive/

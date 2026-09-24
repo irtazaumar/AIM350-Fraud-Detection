@@ -1,71 +1,151 @@
 import pandas as pd
+import numpy as np
 
-df = pd.read_csv(
-    r"C:\Users\umarm\OneDrive\Documents\AIM350 programming for ai\PS_20174392719_1491204439457_log.csv\PS_20174392719_1491204439457_log.csv"
+
+train_file = r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\fraudTrain.csv"
+test_file = r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\fraudTest.csv"
+
+
+print("Loading data...")
+
+train_data = pd.read_csv(train_file)
+test_data = pd.read_csv(test_file)
+
+
+# convert date columns
+train_data["trans_date_trans_time"] = pd.to_datetime(
+    train_data["trans_date_trans_time"]
 )
 
-print("Original dataset shape:")
-print(df.shape)
-
-# 2. Keep only transaction types where fraud actually occurs
-model_df = df[df["type"].isin(["TRANSFER", "CASH_OUT"])].copy()
-
-print("\nFiltered dataset shape:")
-print(model_df.shape)
-
-print("\nFraud counts in filtered dataset:")
-print(model_df["isFraud"].value_counts())
-
-print("\nFraud percentages in filtered dataset:")
-print(model_df["isFraud"].value_counts(normalize=True))
-
-# 3. Remove columns we do not want to use as model features
-model_df = model_df.drop(
-    columns=["nameOrig", "nameDest", "isFlaggedFraud"]
+test_data["trans_date_trans_time"] = pd.to_datetime(
+    test_data["trans_date_trans_time"]
 )
 
-print("\nColumns after removing identifiers/leakage:")
-print(model_df.columns)
+train_data["dob"] = pd.to_datetime(train_data["dob"])
+test_data["dob"] = pd.to_datetime(test_data["dob"])
 
-# 4. Separate fraud and legitimate transactions
-fraud_df = model_df[model_df["isFraud"] == 1]
-legit_df = model_df[model_df["isFraud"] == 0]
 
-print("\nFraud rows available:")
-print(len(fraud_df))
+# transaction hour
+train_data["transaction_hour"] = train_data["trans_date_trans_time"].dt.hour
+test_data["transaction_hour"] = test_data["trans_date_trans_time"].dt.hour
 
-print("\nLegitimate rows available:")
-print(len(legit_df))
 
-# 5. Create a smaller development dataset
-# Keep ALL fraud rows and randomly sample 200,000 legitimate rows
-legit_sample = legit_df.sample(
-    n=200000,
-    random_state=42
+# day of week
+train_data["day_of_week"] = train_data["trans_date_trans_time"].dt.dayofweek
+test_data["day_of_week"] = test_data["trans_date_trans_time"].dt.dayofweek
+
+
+# weekend
+train_data["is_weekend"] = (
+    train_data["day_of_week"] >= 5
+).astype(int)
+
+test_data["is_weekend"] = (
+    test_data["day_of_week"] >= 5
+).astype(int)
+
+
+# customer age
+train_data["customer_age"] = (
+    (train_data["trans_date_trans_time"] - train_data["dob"]).dt.days
+    / 365.25
+).astype(int)
+
+test_data["customer_age"] = (
+    (test_data["trans_date_trans_time"] - test_data["dob"]).dt.days
+    / 365.25
+).astype(int)
+
+
+# distance between customer and merchant
+train_lat = np.radians(train_data["lat"])
+train_long = np.radians(train_data["long"])
+train_merch_lat = np.radians(train_data["merch_lat"])
+train_merch_long = np.radians(train_data["merch_long"])
+
+train_lat_diff = train_merch_lat - train_lat
+train_long_diff = train_merch_long - train_long
+
+train_a = (
+    np.sin(train_lat_diff / 2) ** 2
+    + np.cos(train_lat)
+    * np.cos(train_merch_lat)
+    * np.sin(train_long_diff / 2) ** 2
 )
 
-dev_df = pd.concat([fraud_df, legit_sample])
+train_c = 2 * np.arcsin(np.sqrt(train_a))
 
-# Shuffle the rows
-dev_df = dev_df.sample(
-    frac=1,
-    random_state=42
-).reset_index(drop=True)
+train_data["distance_miles"] = 3958.8 * train_c
 
-print("\nDevelopment dataset shape:")
-print(dev_df.shape)
 
-print("\nDevelopment dataset fraud counts:")
-print(dev_df["isFraud"].value_counts())
+test_lat = np.radians(test_data["lat"])
+test_long = np.radians(test_data["long"])
+test_merch_lat = np.radians(test_data["merch_lat"])
+test_merch_long = np.radians(test_data["merch_long"])
 
-print("\nDevelopment dataset fraud percentages:")
-print(dev_df["isFraud"].value_counts(normalize=True))
+test_lat_diff = test_merch_lat - test_lat
+test_long_diff = test_merch_long - test_long
 
-# 6. Save the development dataset
-dev_df.to_csv(
-    "paysim_development.csv",
+test_a = (
+    np.sin(test_lat_diff / 2) ** 2
+    + np.cos(test_lat)
+    * np.cos(test_merch_lat)
+    * np.sin(test_long_diff / 2) ** 2
+)
+
+test_c = 2 * np.arcsin(np.sqrt(test_a))
+
+test_data["distance_miles"] = 3958.8 * test_c
+
+# features we plan to use
+features = [
+    "category",
+    "state",
+    "amt",
+    "city_pop",
+    "customer_age",
+    "transaction_hour",
+    "day_of_week",
+    "is_weekend",
+    "distance_miles"
+]
+
+
+X_train = train_data[features]
+y_train = train_data["is_fraud"]
+X_test = test_data[features]
+y_test = test_data["is_fraud"]
+
+
+print("\nFEATURES")
+print(features)
+print("\nTRAINING DATA SHAPE")
+print(X_train.shape)
+print("\nTEST DATA SHAPE")
+print(X_test.shape)
+print("\nFIRST 5 TRAINING ROWS")
+print(X_train.head())
+print("\nTRAINING TARGET COUNTS")
+print(y_train.value_counts())
+print("\nTEST TARGET COUNTS")
+print(y_test.value_counts())
+
+
+# save the prepared data
+
+train_ready = train_data[features + ["is_fraud"]]
+test_ready = test_data[features + ["is_fraud"]]
+
+
+train_ready.to_csv(
+    r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\processed\train_processed.csv",
     index=False
 )
 
-print("\nSaved development dataset as:")
-print("paysim_development.csv")
+test_ready.to_csv(
+    r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\processed\test_processed.csv",
+    index=False
+)
+
+
+print("\nProcessed files saved.")
