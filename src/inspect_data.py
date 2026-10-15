@@ -1,8 +1,9 @@
-import pandas as pd
+from pathlib import Path
 
+ROOT = Path(__file__).resolve().parent.parent
 
-train_file = r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\fraudTrain.csv"
-test_file = r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\fraudTest.csv"
+train_file = ROOT / "data" / "fraudTrain.csv"
+test_file = ROOT / "data" / "fraudTest.csv"
 
 
 print("Loading data...")

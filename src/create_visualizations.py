@@ -1,8 +1,11 @@
+from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
 
-file = r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\fraudTrain.csv"
+ROOT = Path(__file__).resolve().parent.parent
+
+file = ROOT / "data" / "fraudTrain.csv"
 
 data = pd.read_csv(file)
 
@@ -20,7 +23,7 @@ plt.ylabel("Fraud Rate (%)")
 plt.tight_layout()
 
 plt.savefig(
-    r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\figures\fraud_by_category.png"
+    ROOT / "figures" / "fraud_by_category.png"
 )
 
 plt.close()
@@ -45,7 +48,7 @@ plt.ylabel("Fraud Rate (%)")
 plt.tight_layout()
 
 plt.savefig(
-    r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\figures\fraud_by_hour.png"
+    ROOT / "figures" / "fraud_by_hour.png"
 )
 
 plt.close()
@@ -70,9 +73,8 @@ plt.xticks(
 plt.tight_layout()
 
 plt.savefig(
-    r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\figures\average_transaction_amount.png"
+    ROOT / "figures" / "average_transaction_amount.png"
 )
-
 plt.close()
 
 

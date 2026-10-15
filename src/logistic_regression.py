@@ -1,10 +1,17 @@
+from pathlib import Path
 import joblib
-import os
 import pandas as pd
 
+ROOT = Path(__file__).resolve().parent.parent
+
 # Load the processed training and test data
-train_data = pd.read_csv("data/processed/train_processed.csv")
-test_data = pd.read_csv("data/processed/test_processed.csv")
+train_data = pd.read_csv(
+    ROOT / "data" / "processed" / "train_processed.csv"
+)
+
+test_data = pd.read_csv(
+    ROOT / "data" / "processed" / "test_processed.csv"
+)
 
 print("Training data shape:", train_data.shape)
 print("Test data shape:", test_data.shape)
@@ -87,11 +94,12 @@ model.fit(X_train, y_train)
 
 print("Training complete.")
 # Save the trained model
-os.makedirs("models", exist_ok=True)
+models_dir = ROOT / "models"
+models_dir.mkdir(parents=True, exist_ok=True)
 
 joblib.dump(
     model,
-    "models/logistic_regression_model.joblib"
+    models_dir / "logistic_regression_model.joblib"
 )
 
 print("Model saved.")
@@ -120,5 +128,10 @@ plt.bar(metrics, scores)
 plt.title("Logistic Regression Performance")
 plt.ylabel("Score")
 plt.ylim(0, 1)
-plt.savefig("logistic_regression_metrics.png")
+figures_dir = ROOT / "figures"
+figures_dir.mkdir(parents=True, exist_ok=True)
+
+plt.savefig(
+    figures_dir / "logistic_regression_metrics.png"
+)
 plt.show()

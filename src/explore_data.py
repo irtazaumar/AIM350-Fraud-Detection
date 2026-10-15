@@ -1,7 +1,10 @@
+from pathlib import Path
 import pandas as pd
 
 
-train_file = r"C:\Users\umarm\OneDrive\Documents\AIM350_Fraud_Project\data\fraudTrain.csv"
+ROOT = Path(__file__).resolve().parent.parent
+
+train_file = ROOT / "data" / "fraudTrain.csv"
 
 data = pd.read_csv(train_file)
 
