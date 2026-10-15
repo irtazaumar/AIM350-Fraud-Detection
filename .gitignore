@@ -16,7 +16,6 @@ venv/
 
 # Generated model files
 models/*.pkl
-models/*.joblib
 
 # OS files
 .DS_Store
