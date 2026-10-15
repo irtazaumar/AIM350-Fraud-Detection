@@ -65,12 +65,12 @@ AIM350-Fraud-Detection/
 ├── README.md
 └── requirements.txt
 
-Setup
-1. Clone the Repository
+## Setup
+#1. Clone the Repository
 git clone https://github.com/irtazaumar/AIM350-Fraud-Detection.git
 cd AIM350-Fraud-Detection
 
-2. Install the Required Python Packages
+#2. Install the Required Python Packages
 Python 3.14 was used for this project.
 py -3.14 -m pip install -r requirements.txt
 
@@ -81,7 +81,7 @@ The project uses:
 - joblib
 - matplotlib
 - Streamlit
-Download the Dataset
+#Download the Dataset
 Download the Credit Card Transactions Fraud Detection Dataset from Kaggle:
 https://www.kaggle.com/datasets/kartik2112/fraud-detection
 After downloading the dataset, place the two raw CSV files inside the data folder.
@@ -92,7 +92,7 @@ data/
 └── README.md
 
 The scripts use relative project paths, so the repository can be cloned and run from another computer without changing file locations in the source code.
-Data Inspection
+#Data Inspection
 The raw training and testing files can be inspected using:
 py -3.14 src\inspect_data.py
 
@@ -104,7 +104,7 @@ The inspection script reports:
 - Fraud counts
 - Fraud percentages
 The dataset was found to contain no missing values and no duplicate rows.
-Exploratory Data Analysis
+#Exploratory Data Analysis
 Run the exploratory analysis with:
 py -3.14 src\explore_data.py
 
@@ -124,7 +124,7 @@ Current EDA figures include:
 - figures/fraud_by_category.png
 - figures/fraud_by_hour.png
 - figures/average_transaction_amount.png
-Base Feature Engineering and Data Preparation
+#Base Feature Engineering and Data Preparation
 The Logistic Regression model uses a processed version of the original Sparkov dataset.
 Run:
 py -3.14 src\prepare_data.py
@@ -153,7 +153,7 @@ data/processed/train_processed.csv
 data/processed/test_processed.csv
 
 The processed CSV files are generated locally and are not stored in the GitHub repository.
-Logistic Regression Baseline
+#Logistic Regression Baseline
 The Logistic Regression model uses the processed training and testing files created by src/prepare_data.py.
 Run:
 py -3.14 src\logistic_regression.py
@@ -171,12 +171,12 @@ The trained model is saved locally as:
 models/logistic_regression_model.joblib
 
 The Logistic Regression model file is generated when the script is run and does not need to be stored in the repository.
-Logistic Regression Results
+#Logistic Regression Results
 - Accuracy: 88.19%
 - Precision: 2.38%
 - Recall: 73.89%
 - F1 Score: 4.61%
-Logistic Regression Confusion Matrix
+#Logistic Regression Confusion Matrix
 - True Negatives: 488,505
 - False Positives: 65,069
 - False Negatives: 560
@@ -185,7 +185,7 @@ The model achieved relatively high recall but produced a large number of false p
 The Logistic Regression performance visualization is saved as:
 figures/logistic_regression_metrics.png
 
-Random Forest Model
+#Random Forest Model
 The final Random Forest V3 model uses the original raw Sparkov training and testing files.
 Unlike the Logistic Regression model, the Random Forest does not use the 9-feature processed CSV files created by prepare_data.py.
 Instead, the Random Forest evaluation pipeline performs its own model-specific feature engineering using:
@@ -212,7 +212,7 @@ The model-specific pipeline creates a larger set of features, including:
 - Previous customer-merchant activity
 - Previous merchant transaction activity
 The feature-engineering process only uses transactions that occurred earlier in time when constructing historical features.
-Random Forest Evaluation
+#Random Forest Evaluation
 Run the final Random Forest evaluation with:
 py -3.14 src\evaluate_saved_model.py data\fraudTest.csv --train-data data\fraudTrain.csv
 
@@ -228,7 +228,7 @@ This command:
 The selected Random Forest classification threshold is approximately:
 0.224289
 
-Random Forest Results
+#Random Forest Results
 - Precision: 79.19%
 - Recall: 80.56%
 - F1 Score: 79.87%
@@ -237,13 +237,13 @@ Random Forest Results
 - PR-AUC: approximately 0.8534
 - Average Precision: approximately 0.8534
 - Fraud-Dollar Recall: 96.75%
-Random Forest Confusion Matrix
+#Random Forest Confusion Matrix
 - True Negatives: 553,120
 - False Positives: 454
 - False Negatives: 417
 - True Positives: 1,728
 The Random Forest substantially reduced false positives while also improving recall and F1 score compared with the Logistic Regression baseline.
-Model Comparison
+#Model Comparison
 Metric	Logistic Regression	Random Forest
 Precision	2.38%	79.19%
 Recall	73.89%	80.56%
@@ -255,7 +255,7 @@ False Negatives	560	417
 
 The Logistic Regression model detected a large portion of fraudulent transactions but incorrectly flagged many legitimate transactions.
 The Random Forest model achieved higher recall while dramatically improving precision and reducing false positives. Based on these results, the Random Forest was selected as the final model for the Streamlit application.
-Streamlit Application
+#Streamlit Application
 The final Random Forest model is integrated into an interactive Streamlit application.
 Run the application with:
 py -3.14 -m streamlit run app.py
@@ -281,7 +281,7 @@ The dashboard reports:
 - Recall
 - F1 Score
 - ROC-AUC
-Reproducing the Full Project
+#Reproducing the Full Project
 After cloning the repository and downloading the two raw CSV files, the main project can be reproduced in the following order.
 Step 1: Install Dependencies
 py -3.14 -m pip install -r requirements.txt
@@ -307,7 +307,7 @@ py -3.14 src\evaluate_saved_model.py data\fraudTest.csv --train-data data\fraudT
 Step 8: Run the Streamlit Application
 py -3.14 -m streamlit run app.py
 
-Notes on Reproducibility
+#Notes on Reproducibility
 - Python 3.14 was used during development and testing.
 - Raw Kaggle CSV files are not included in the repository because of their size.
 - The user must download fraudTrain.csv and fraudTest.csv and place them inside the data folder.
