@@ -42,6 +42,7 @@ The target column is `is_fraud`:
 
 The raw CSV files are not stored in this repository because of their size.
 
+
 ## Project Structure
 
 ```text
@@ -64,6 +65,8 @@ AIM350-Fraud-Detection/
 ├── .gitignore
 ├── README.md
 └── requirements.txt
+
+```
 
 ## Setup
 #1. Clone the Repository
