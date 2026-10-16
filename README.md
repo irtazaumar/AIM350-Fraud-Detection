@@ -44,7 +44,7 @@ The raw CSV files are not stored in this repository because of their size.
 
 ## Project Structure
 
-text
+```text
 AIM350-Fraud-Detection/
 ├── data/
 │   └── README.md
