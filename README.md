@@ -400,7 +400,7 @@ The Streamlit application allows the user to:
 - Reset the transaction simulation
 - Display model performance metrics
 - Display the confusion matrix
-- Display the fraud-risk distribution
+
 
 The dashboard reports:
 
@@ -408,6 +408,7 @@ The dashboard reports:
 - Recall
 - F1 Score
 - ROC-AUC
+- PR-AUC
 ## Reproducing the Full Project
 
 After cloning the repository and downloading the two raw CSV files, the full project can be reproduced in the following order.

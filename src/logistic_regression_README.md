@@ -10,6 +10,8 @@ For this project, I used Logistic Regression as the baseline model for detecting
 - Precision: 2.38%
 - Recall: 73.89%
 - F1 Score: 4.61%
+- ROC-AUC: 0.9016
+- PR-AUC: 0.1166
 
 ### Confusion Matrix
 
