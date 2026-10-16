@@ -2,9 +2,10 @@ import pandas as pd
 import streamlit as st
 
 from sklearn.metrics import (
-    average_precision_score,
+    auc,
     confusion_matrix,
     f1_score,
+    precision_recall_curve,
     precision_score,
     recall_score,
     roc_auc_score,
@@ -26,9 +27,7 @@ st.write("AIM 350 — Machine Learning Group Project")
 st.divider()
 
 
-# --------------------------------------------------
 # Transaction Fraud Prediction
-# --------------------------------------------------
 
 st.subheader("Transaction Fraud Prediction")
 
@@ -119,9 +118,7 @@ if st.button("Predict Fraud"):
 st.divider()
 
 
-# --------------------------------------------------
 # Simulated Live Transaction Stream
-# --------------------------------------------------
 
 st.subheader("Live Transaction Simulation")
 
@@ -214,9 +211,7 @@ if history:
 st.divider()
 
 
-# --------------------------------------------------
 # Random Forest Performance
-# --------------------------------------------------
 
 st.subheader("Random Forest Model Performance")
 
@@ -252,9 +247,16 @@ roc_auc = roc_auc_score(
     y_prob
 )
 
-pr_auc = average_precision_score(
+
+# Calculate true PR-AUC
+pr_precision, pr_recall, _ = precision_recall_curve(
     y_true,
     y_prob
+)
+
+pr_auc = auc(
+    pr_recall,
+    pr_precision
 )
 
 
@@ -313,17 +315,4 @@ matrix_df = pd.DataFrame(
 st.dataframe(
     matrix_df,
     use_container_width=True,
-)
-
-
-st.write("### Fraud Risk Distribution")
-
-
-st.bar_chart(
-    results[
-        "risk_score"
-    ].value_counts(
-        bins=10,
-        sort=False,
-    )
 )
