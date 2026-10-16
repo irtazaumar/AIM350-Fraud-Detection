@@ -21,4 +21,4 @@ models/*.pkl
 .DS_Store
 Thumbs.db
 
-archive/
+archive/models/logistic_regression_model.joblib

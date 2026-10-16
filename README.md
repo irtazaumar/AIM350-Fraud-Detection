@@ -251,6 +251,8 @@ The Logistic Regression model file is generated when the script is run and does 
 - Precision: 2.38%
 - Recall: 73.89%
 - F1 Score: 4.61%
+- ROC-AUC: 0.9016
+- PR-AUC: 0.1166
 
 ### Logistic Regression Confusion Matrix
 
@@ -359,6 +361,8 @@ The Random Forest substantially reduced false positives while also improving rec
 | Precision | 2.38% | 79.19% |
 | Recall | 73.89% | 80.56% |
 | F1 Score | 4.61% | 79.87% |
+| ROC-AUC | 0.9016 | 0.9841 |
+| PR-AUC | 0.1166 | 0.8534 |
 | True Positives | 1,585 | 1,728 |
 | False Positives | 65,069 | 454 |
 | False Negatives | 560 | 417 |
