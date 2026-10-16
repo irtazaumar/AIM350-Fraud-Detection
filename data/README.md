@@ -3,13 +3,22 @@
 This project uses the Credit Card Transactions Fraud Detection Dataset by Kartik Shenoy from Kaggle.
 
 Dataset link:
+
 https://www.kaggle.com/datasets/kartik2112/fraud-detection
 
 ## Raw Data Files
 
 The dataset contains two original CSV files:
-- fraudTrain.csv
-- fraudTest.csv
+
+- `fraudTrain.csv`
+- `fraudTest.csv`
+
+Place both files directly inside the `data` folder:
+
+```text
+data/fraudTrain.csv
+data/fraudTest.csv
+```
 
 The training file contains 1,296,675 transactions.
 The test file contains 555,719 transactions.
